@@ -15,6 +15,7 @@ async function createToken(playLoad, tokenOptions) {
 }
 
 async function verifyToken(refreshToken, tokenOptions) {
+    
     const decodedPlayLoad = jwt.verify(
         refreshToken,
         tokenOptions.secret, {

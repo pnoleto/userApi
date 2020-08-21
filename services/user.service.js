@@ -32,9 +32,8 @@ async function createUser(userInfo) {
     const clientConnection = await repository.clientConnection();
     const queryResult = await clientConnection.query(
         insertUserQuery,
-        [
-            JSON.stringify(user)
-        ]);
+        [JSON.stringify(user)]
+    );
 
     return queryResult[0].id;
 }
@@ -42,7 +41,6 @@ async function createUser(userInfo) {
 async function getUsers({ socialId, username, email }) {
     const clientConnection = await repository.clientConnection();
     const paramsObj = getUsersQuery({ socialId, username, email });
-
     const queryResult = await clientConnection.query(
         paramsObj.query,
         paramsObj.params
@@ -54,24 +52,10 @@ async function getUsers({ socialId, username, email }) {
 async function getUser(socialId) {
     let user = new User();
     const pgClient = await repository.clientConnection();
+    const paramsObj = getUsersQuery({ socialId });
     const resultSet = await pgClient.query(
-        selectUsers + ' where userinfo::jsonb->>\'socialId\'=$1', [socialId]
-    );
-
-    if (resultSet.rowCount > 0) {
-        const entity = resultSet.rows[0];
-        user = entity.userinfo;
-        user.id = entity.id;
-    }
-
-    return user;
-}
-
-async function getUser(socialId) {
-    let user = new User();
-    const pgClient = await repository.clientConnection();
-    const resultSet = await pgClient.query(
-        selectUsers + ' where userinfo::jsonb->>\'socialId\'=$1', [socialId]
+        paramsObj.query,
+        paramsObj.params
     );
 
     if (resultSet.rowCount > 0) {
