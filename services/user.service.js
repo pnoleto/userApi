@@ -9,19 +9,21 @@ function getUsersQuery({ socialId, username, email }) {
     let params = [];
 
     if (socialId) {
-        query += 'and userinfo::jsonb->>\'socialId\'=$1';
         params.push(socialId);
+        query += 'and userinfo::jsonb->>\'socialId\'=$' + params.length;
     }
 
     if (username) {
-        query += 'and userinfo::jsonb->>\'username\'=$2';
         params.push(username);
+        query += 'and userinfo::jsonb->>\'username\' ilike $' + params.length;
     }
 
     if (email) {
-        query += 'and userinfo::jsonb->>\'email\'=$3';
         params.push(email);
+        query += 'and userinfo::jsonb->>\'email\' ilike $' + params.length;
     }
+
+    console.log(query, params);
 
     return { query, params };
 }

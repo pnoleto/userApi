@@ -7,7 +7,7 @@ function errorHandler(err, req, res, next) {
 
     if (err.name === 'UnauthorizedError') {
         // jwt authentication error
-        return res.status(401).json({ name: err.name, message: 'Invalid Token or Token Expired' });
+        return res.status(401).json({ name: err.name, message: 'Invalid WebToken or WebToken Expired' });
     }
 
     if (err.name === 'JsonWebTokenError') {

@@ -2,7 +2,6 @@ const jwtMiddleWare = require('../helpers/jwtMiddleware');
 const authRoute = require('./routes/authenticateRoute');
 const errorHandler = require('../helpers/errorHandler');
 const logger = require('../services/logger.service');
-const personRoute = require('./routes/personRoute');
 const { corsOptions } = require('../config.json');
 const compression = require('compression');
 const bodyParser = require('body-parser');
@@ -22,9 +21,8 @@ app.use(helmet());
 //Rotas
 app.use(`/v1`, index);
 app.use(`/v1/users`, authRoute);
-app.use(`/v1/persons`, personRoute);
 //O middlewere de log deve estar entre as rotas e o manipulador de erros.
-app.use(logger);
+//app.use(logger);
 //O middlewere de manipulação de erros deve ser sempre o ultimo.
 app.use(errorHandler);
 
