@@ -1,4 +1,3 @@
-const authorizeHandler = require('../helpers/authorizeHandler');
 const jwtMiddleWare = require('../helpers/jwtMiddleware');
 const authRoute = require('./routes/authenticateRoute');
 const errorHandler = require('../helpers/errorHandler');
@@ -22,10 +21,10 @@ app.use(compression());
 app.use(helmet());
 //Rotas
 app.use(`/v1`, index);
-app.use(`/v1/persons`, personRoute);
 app.use(`/v1/users`, authRoute);
+app.use(`/v1/persons`, personRoute);
 //O middlewere de log deve estar entre as rotas e o manipulador de erros.
-//app.use(logger);
+app.use(logger);
 //O middlewere de manipulação de erros deve ser sempre o ultimo.
 app.use(errorHandler);
 
