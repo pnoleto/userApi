@@ -7,7 +7,7 @@ function errorHandler(err, req, res, next) {
 
     if (err.name === 'UnauthorizedError') {
         // jwt authentication error
-        return res.status(401).json({ name: err.name, message: 'Invalid Token' });
+        return res.status(401).json({ name: err.name, message: 'Invalid Token or Token Expired' });
     }
 
     if (err.name === 'JsonWebTokenError') {
@@ -17,6 +17,10 @@ function errorHandler(err, req, res, next) {
 
     if (err.name === "InvalidCredential") {
         return res.status(401).json({ name: err.name, message: 'Username or password are incorrect' });
+    }
+
+    if (err.name === "Forbidden") {
+        return res.status(403).json({ name: err.name, message: 'Forbidden' });
     }
 
     // default to 500 server error
