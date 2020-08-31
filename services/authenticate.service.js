@@ -15,7 +15,7 @@ async function createToken(playLoad, tokenOptions) {
 }
 
 async function verifyToken(refreshToken, tokenOptions) {
-    
+
     const decodedPlayLoad = jwt.verify(
         refreshToken,
         tokenOptions.secret, {
@@ -30,11 +30,11 @@ async function authenticate({ socialId }) {
     const user = await userService.getUser(socialId);
 
     if (user.id > 0) {
-        const { password, ...userWithoutPassword } = user;
+        const playLoad = { password, ...userWithoutPassword } = user;
 
-        const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
+        const token = await createToken({ user: playLoad }, config.tokenOptions);
 
-        const refreshToken = await createToken({ ...userWithoutPassword }, config.refreshTokenOptions);
+        const refreshToken = await createToken({ user: playLoad }, config.refreshTokenOptions);
 
         return { ...userWithoutPassword, token, refreshToken };
     }
@@ -45,13 +45,11 @@ async function authenticate({ socialId }) {
 async function refreshToken({ refreshToken }) {
 
     const decodedPlayload = await verifyToken(refreshToken, config.refreshTokenOptions);
-    const user = await userService.getUser(decodedPlayload.socialId);
 
-    if (user.id > 0) {
+    if (decodedPlayload) {
+        const playload = { password, ...userWithoutPassword } = decodedPlayload.user;
 
-        const { password, ...userWithoutPassword } = user;
-
-        const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
+        const token = await createToken({ user: playload }, config.tokenOptions);
 
         return { ...userWithoutPassword, token };
     }
