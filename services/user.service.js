@@ -23,8 +23,6 @@ function getUsersQuery({ socialId, username, email }) {
         query += 'and userinfo::jsonb->>\'email\' ilike $' + params.length;
     }
 
-    console.log(query, params);
-
     return { query, params };
 }
 
