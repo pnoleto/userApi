@@ -7,7 +7,7 @@
     },
     "refreshTokenOptions": {
         "secret": "key value to refresh token",
-        "expiresIn": 6000,
+        "expiresIn": 9000,
         "algorithm": "HS512",
         "issuer": "userApi"
     },
@@ -52,11 +52,11 @@
             "query",
             "body"
         ],
-        "requestBlacklist": [
-            "process",
-            "error",
+        "blackFieldsBlacklist": [
             "trace",
-            "stack"
+            "process",
+            "stack",
+            "message"
         ],
         "statusLevels": {
             "success": "debug",

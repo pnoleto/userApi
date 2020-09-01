@@ -22,7 +22,7 @@ app.use(helmet());
 app.use(`/v1`, index);
 app.use(`/v1/users`, authRoute);
 //O middlewere de log deve estar entre as rotas e o manipulador de erros.
-//app.use(logger);
+app.use(logger);
 //O middlewere de manipulação de erros deve ser sempre o ultimo.
 app.use(errorHandler);
 

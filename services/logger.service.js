@@ -12,7 +12,9 @@ const loggerInstance = expressWinston.errorLogger({
         winston.format.colorize(),
     ),
     requestWhitelist: loggerOptions.requestWhitelist,
-    blacklistedMetaFields: loggerOptions.requestBlacklist
+    responseWhitelist: loggerOptions.responseWhitelist,
+    blacklistedMetaFields: loggerOptions.blackFieldsBlacklist,
+    statusLevels: loggerOptions.statusLevels
 });
 
 module.exports = loggerInstance;
