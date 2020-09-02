@@ -12,12 +12,12 @@ const cors = require('cors');
 
 const app = express();
 
+app.use(helmet());
+app.use(compression());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
 app.use(jwtMiddleWare());
-app.use(compression());
-app.use(helmet());
 //Rotas
 app.use(`/v1`, index);
 app.use(`/v1/users`, authRoute);
