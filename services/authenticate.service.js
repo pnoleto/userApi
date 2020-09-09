@@ -27,19 +27,22 @@ async function verifyToken(refreshToken, tokenOptions) {
 
 async function authenticate({ socialId }) {
 
+    if (!socialId)
+        throw { status: 412, name: 'PreconditionFailed', message: 'Param socialId is invalid' };
+
     const user = await userService.getUser(socialId);
 
     if (user.id > 0) {
-        const playLoad = { password, ...userWithoutPassword } = user;
+        const { password, ...userWithoutPassword } = user;
 
-        const token = await createToken({ user: playLoad }, config.tokenOptions);
+        const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
 
-        const refreshToken = await createToken({ user: playLoad }, config.refreshTokenOptions);
+        const refreshToken = await createToken({ ...userWithoutPassword }, config.refreshTokenOptions);
 
         return { ...userWithoutPassword, token, refreshToken };
     }
 
-    throw { name: 'InvalidCredential' };
+    throw { status: 401, name: 'InvalidCredential', message: 'Username or password are incorrect' };
 }
 
 async function refreshToken({ refreshToken }) {
@@ -47,14 +50,14 @@ async function refreshToken({ refreshToken }) {
     const decodedPlayload = await verifyToken(refreshToken, config.refreshTokenOptions);
 
     if (decodedPlayload) {
-        const playload = { password, ...userWithoutPassword } = decodedPlayload.user;
+        const { password, iat, exp, iss, ...userWithoutPassword } = decodedPlayload;
 
-        const token = await createToken({ user: playload }, config.tokenOptions);
+        const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
 
         return { ...userWithoutPassword, token };
     }
 
-    throw { name: 'UnauthorizedError' };
+    throw { status: 401, name: 'UnauthorizedError', message: 'Invalid WebToken or WebToken Expired' };
 }
 
 module.exports = { authenticate, refreshToken };

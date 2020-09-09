@@ -2,49 +2,59 @@ const repository = require('./repository.service');
 const User = require('../src/models/user');
 
 const selectUsers = 'select id, userinfo from "user".userinfo';
-const insertUserQuery = 'insert into "user".userInfo values($1) returning id';
+const insertUserQuery = 'insert into "user".userInfo(userinfo) values($1) returning id, userinfo';
 
-function getUsersQuery({ socialId, username, email }) {
-    let query = selectUsers + ' where 1=1 ';
+function getUsersQuery({ socialId, username, email, skip, take }) {
+    let query = selectUsers + ' where 1=1';
     let params = [];
 
     if (socialId) {
         params.push(socialId);
-        query += 'and userinfo::jsonb->>\'socialId\'=$' + params.length;
+        query += ` and userinfo::jsonb->>'socialId'=$${params.length}`;
     }
 
     if (username) {
         params.push(username);
-        query += 'and userinfo::jsonb->>\'username\' ilike $' + params.length;
+        query += ` and userinfo::jsonb->>'username' ilike $${params.length}`;
     }
 
     if (email) {
         params.push(email);
-        query += 'and userinfo::jsonb->>\'email\' ilike $' + params.length;
+        query += ` and userinfo::jsonb->>'email' ilike $${params.length}`;
+    }
+
+    if (skip) {
+        params.push(skip);
+        query += ` offset $${params.length}`;
+    }
+
+    if (take) {
+        params.push(take);
+        query += ` limit $${params.length}`;
     }
 
     return { query, params };
 }
 
 async function createUser(userInfo) {
-    const user = new User();
-    user = { userInfo };
     const clientConnection = await repository.clientConnection();
     const queryResult = await clientConnection.query(
         insertUserQuery,
-        [JSON.stringify(user)]
+        [JSON.stringify(userInfo)]
     );
 
-    return queryResult[0].id;
+    return queryResult;
 }
 
-async function getUsers({ socialId, username, email }) {
+async function getUsers({ socialId, username, email, skip, take }) {
     const clientConnection = await repository.clientConnection();
-    const paramsObj = getUsersQuery({ socialId, username, email });
+    const paramsObj = getUsersQuery({ socialId, username, email, skip, take });
     const queryResult = await clientConnection.query(
         paramsObj.query,
         paramsObj.params
     );
+
+    console.log(paramsObj);
 
     return queryResult;
 }
@@ -52,7 +62,7 @@ async function getUsers({ socialId, username, email }) {
 async function getUser(socialId) {
     let user = new User();
     const pgClient = await repository.clientConnection();
-    const paramsObj = getUsersQuery({ socialId });
+    const paramsObj = getUsersQuery({ socialId, take: 1 });
     const resultSet = await pgClient.query(
         paramsObj.query,
         paramsObj.params
@@ -63,7 +73,7 @@ async function getUser(socialId) {
         user = entity.userinfo;
         user.id = entity.id;
     }
-
+    console.log(user);
     return user;
 }
 

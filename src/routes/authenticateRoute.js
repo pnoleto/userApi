@@ -10,7 +10,7 @@ router.post('/token', authcontroller.token);
 router.post('/refreshToken', authcontroller.refreshToken);
 
 router.post('/', authorize(rolesEnum.admin), userscontroller.post);
-router.get('/all', authorize(rolesEnum.admin), userscontroller.get);
+router.get('/', authorize(rolesEnum.admin), userscontroller.get);
 router.delete('/:socialId', authorize(rolesEnum.admin), userscontroller.delete);
 
 module.exports = router;

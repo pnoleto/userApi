@@ -4,13 +4,12 @@ function authorize(roles = []) {
         roles = [roles];
     }
 
-
     return (req, res, next) => {
         const userRoles = req.user.roles;
         const isAuthorized = roles.some(role => userRoles.includes(role));
 
         if (!isAuthorized)
-            throw { name: 'Forbidden' };
+            throw { status: 403, name: 'Forbidden', message: 'Forbidden' };
 
         next();
     }

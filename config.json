@@ -32,9 +32,9 @@
     "postgresOptions": {
         "host": "localhost",
         "port": 5432,
-        "database": "",
-        "user": "",
-        "password": "",
+        "database": "users",
+        "user": "postgres",
+        "password": "AS@b5jf76",
         "query_timeout": 1000,
         "ssl": false
     },
