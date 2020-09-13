@@ -1,5 +1,6 @@
 const repository = require('./repository.service');
 const User = require('../src/models/user');
+const ExceptionResult = require('../src/models/exceptionResult');
 
 const selectUsers = 'select id, userinfo from "user".userinfo';
 const insertUserQuery = 'insert into "user".userInfo(userinfo) values($1) returning id, userinfo';
@@ -37,44 +38,63 @@ function getUsersQuery({ socialId, username, email, skip, take }) {
 }
 
 async function createUser(userInfo) {
-    const clientConnection = await repository.clientConnection();
-    const queryResult = await clientConnection.query(
-        insertUserQuery,
-        [JSON.stringify(userInfo)]
-    );
+    try {
+        const clientConnection = await repository.clientConnection();
+        const queryResult = await clientConnection.query(
+            insertUserQuery,
+            [JSON.stringify(userInfo)]
+        );
 
-    return queryResult;
+        clientConnection.end();
+
+        return queryResult;
+    }
+    catch (error) {
+        throw new ExceptionResult(500, error.name, error.message);
+    }
 }
 
 async function getUsers({ socialId, username, email, skip, take }) {
-    const clientConnection = await repository.clientConnection();
-    const paramsObj = getUsersQuery({ socialId, username, email, skip, take });
-    const queryResult = await clientConnection.query(
-        paramsObj.query,
-        paramsObj.params
-    );
+    try {
+        const clientConnection = await repository.clientConnection();
+        const paramsObj = getUsersQuery({ socialId, username, email, skip, take });
+        const queryResult = await clientConnection.query(
+            paramsObj.query,
+            paramsObj.params
+        );
 
-    console.log(paramsObj);
+        clientConnection.end();
 
-    return queryResult;
+        return queryResult;
+    }
+    catch (error) {
+        throw new ExceptionResult(500, error.name, error.message);
+    }
 }
 
 async function getUser(socialId) {
-    let user = new User();
-    const pgClient = await repository.clientConnection();
-    const paramsObj = getUsersQuery({ socialId, take: 1 });
-    const resultSet = await pgClient.query(
-        paramsObj.query,
-        paramsObj.params
-    );
+    try {
+        let user = new User();
+        const clientConnection = await repository.clientConnection();
+        const paramsObj = getUsersQuery({ socialId, take: 1 });
+        const resultSet = await clientConnection.query(
+            paramsObj.query,
+            paramsObj.params
+        );
 
-    if (resultSet.rowCount > 0) {
-        const entity = resultSet.rows[0];
-        user = entity.userinfo;
-        user.id = entity.id;
+        if (resultSet.rowCount > 0) {
+            const entity = resultSet.rows[0];
+            user = entity.userinfo;
+            user.id = entity.id;
+        }
+
+        clientConnection.end();
+
+        return user;
     }
-    console.log(user);
-    return user;
+    catch (error) {
+        throw new ExceptionResult(500, error.name, error.message);
+    }
 }
 
 module.exports = { getUser, getUsers, createUser }

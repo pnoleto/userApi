@@ -1,5 +1,7 @@
 const userService = require('../../services/user.service');
 const rolesEnums = require('./../../enums/rolesEnum');
+const ApiResult = require('../models/apiResult');
+const ExceptionResult = require('../models/exceptionResult');
 
 function verifyUserProperties(userInfo) {
     let errMsg = [];
@@ -19,7 +21,7 @@ function verifyUserProperties(userInfo) {
         errMsg.push('Param provider is invalid');
 
     if (errMsg.length)
-        throw { status: 412, name: 'PreconditionFailed', message: errMsg.toString() };
+        throw new ExceptionResult(412, 'PreconditionFailed', errMsg.toString());
 }
 
 exports.get = async (req, res, next) => {
@@ -30,13 +32,8 @@ exports.get = async (req, res, next) => {
         skip = req.query.skip;
         take = req.query.take;
 
-        const allUsers = await userService.getUsers({ socialId, username, email, skip, take })
-
-        res.status(200).json({
-            message: 'Lista de usuarios obtida com sucesso',
-            source: allUsers.rows,
-            totalCount: allUsers.rowCount
-        });
+        const allUsers = await userService.getUsers({ socialId, username, email, skip, take });
+        res.json(new ApiResult('Lista de usuarios obtida com sucesso', allUsers.rows, allUsers.rowCount));
     } catch (error) {
         next(error);
     }
@@ -49,22 +46,22 @@ exports.post = async (req, res, next) => {
         const isAlreadyUser = (await userService.getUser(req.body.socialId)).id > 0;
 
         if (isAlreadyUser)
-            throw { status: 409, name: 'Conflict', message: 'Usuario já cadastrado' };
+            throw new ExceptionResult(409, 'Conflict', 'Usuario já cadastrado');
+
 
         req.body.roles = [rolesEnums.user];
 
         const user = await userService.createUser(req.body);
-
-        res.status(200).json({
-            message: 'Usuario cadastrado com sucesso',
-            source: user.rows,
-            totalCount: user.rowCount
-        });
+        res.json(new ApiResult('Usuario cadastrado com sucesso', user.rows, user.rowCount));
     } catch (error) {
         next(error);
     }
 };
 
 exports.delete = async (req, res, next) => {
-    res.status(501).json({ name: 'Not implemented', message: 'Não implementado' });
+    try {
+        throw new ExceptionResult(501, 'Not implemented', 'Não implementado');
+    } catch (error) {
+        next(error);
+    }
 };
