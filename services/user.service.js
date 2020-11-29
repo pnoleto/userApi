@@ -6,7 +6,7 @@ const selectUsers = 'select id, userinfo from "user".userinfo';
 const insertUserQuery = 'insert into "user".userInfo(userinfo) values($1) returning id, userinfo';
 
 function getUsersQuery({ socialId, username, email, skip, take }) {
-    let query = selectUsers + ' where 1=1';
+    let query = `${selectUsers} where 1=1`;
     let params = [];
 
     if (socialId) {
