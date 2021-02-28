@@ -29,15 +29,6 @@
         ],
         "optionsSuccessStatus": 200
     },
-    "postgresOptions": {
-        "host": "localhost",
-        "port": 5432,
-        "database": "users",
-        "user": "postgres",
-        "password": "AS@b5jf76",
-        "query_timeout": 1000,
-        "ssl": false
-    },
     "loggerOptions": {
         "meta": false,
         "colorize": true,
