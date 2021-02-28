@@ -1,5 +1,5 @@
-const repository = require('./repository.service');
 const User = require('../src/models/user');
+const repository = require('./repository.service');
 const ExceptionResult = require('../src/models/exceptionResult');
 
 const selectUsersQuery = 'select id, userinfo from "user".userinfo';

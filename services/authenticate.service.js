@@ -1,6 +1,9 @@
-const userService = require('../services/user.service');
-const config = require('../config.json');
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const userService = require('../services/user.service');
+
+const config = JSON.parse(process.env.tokenOptions);
+
 
 async function createToken(playLoad, tokenOptions) {
 

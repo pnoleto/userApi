@@ -1,16 +1,4 @@
 {
-    "tokenOptions": {
-        "secret": "key value",
-        "expiresIn": 3000,
-        "algorithm": "HS512",
-        "issuer": "userApi"
-    },
-    "refreshTokenOptions": {
-        "secret": "key value to refresh token",
-        "expiresIn": 9000,
-        "algorithm": "HS512",
-        "issuer": "userApi"
-    },
     "corsOptions": {
         "origin": [
             "localhost"
