@@ -1,8 +1,8 @@
-const authcontroller = require('./../controllers/authenticateController');
+const express = require('express');
+const rolesEnum = require('../../enums/rolesEnum');
 const authorize = require('../../helpers/authorizeHandler');
 const userscontroller = require('../controllers/userController');
-const rolesEnum = require('../../enums/rolesEnum');
-const express = require('express');
+const authcontroller = require('./../controllers/authenticateController');
 
 const router = express.Router();
 

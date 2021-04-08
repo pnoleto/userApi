@@ -1,6 +1,6 @@
-const userService = require('../../services/user.service');
-const rolesEnums = require('./../../enums/rolesEnum');
 const ApiResult = require('../models/apiResult');
+const rolesEnums = require('./../../enums/rolesEnum');
+const userService = require('../../services/user.service');
 const ExceptionResult = require('../models/exceptionResult');
 
 function verifyUserProperties(userInfo) {

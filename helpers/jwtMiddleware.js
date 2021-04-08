@@ -1,8 +1,10 @@
+require('dotenv').config();
 const expressJwt = require('express-jwt');
-const { tokenOptions } = require('./../config.json');
+
+const config = JSON.parse(process.env.tokenOptions);
 
 function jwtMiddleware() {
-    const { secret } = tokenOptions;
+    const { secret } = config.tokenOptions;
     return expressJwt({ secret })
         .unless({
             path: [

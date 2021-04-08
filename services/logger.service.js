@@ -1,6 +1,6 @@
-const { loggerOptions } = require('../config.json');
-const expressWinston = require('express-winston');
 const winston = require('winston');
+const expressWinston = require('express-winston');
+const { loggerOptions } = require('../config.json');
 
 const loggerInstance = expressWinston.errorLogger({
     transports: [

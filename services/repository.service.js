@@ -1,5 +1,7 @@
-const { postgresOptions } = require('../config.json');
+require('dotenv').config();
 const { Client } = require('pg');
+
+const postgresOptions = JSON.parse(process.env.postgresOptions);
 
 async function clientConnection() {
     const pgClient = new Client(postgresOptions);
