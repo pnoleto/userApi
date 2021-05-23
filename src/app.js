@@ -4,7 +4,7 @@ const errorHandler = require('../helpers/errorHandler');
 const logger = require('../services/logger.service');
 const { corsOptions } = require('../config.json');
 const compression = require('compression');
-const index = require('./routes/index');
+const indexRoute = require('./routes/indexRoute');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
 app.use(jwtMiddleWare());
 //Rotas
-app.use(`/v1`, index);
+app.use(`/v1`, indexRoute);
 app.use(`/v1/users`, authRoute);
 //O middlewere de log deve estar entre as rotas e o manipulador de erros.
 app.use(logger);

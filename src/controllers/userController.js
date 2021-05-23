@@ -33,7 +33,7 @@ exports.get = async (req, res, next) => {
         email = req.query.email;
         skip = req.query.skip || 0;
         take = req.query.take || 10;
-
+        
         const allUsers = await userService.getUsers({ socialId, username, email, skip, take });
         res.json(new ApiResult('Lista de usuarios obtida com sucesso', allUsers.rows, allUsers.rowCount));
     } catch (error) {
