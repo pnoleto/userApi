@@ -1,10 +1,12 @@
-const ApiResult = require('../models/apiResult');
-const rolesEnums = require('./../../enums/rolesEnum');
+const ApiResult = require('../../domain/models/apiResult');
+const rolesEnums = require('../../domain/enums/rolesEnum');
 const userService = require('../../services/user.service');
-const ExceptionResult = require('../models/exceptionResult');
+const ExceptionResult = require('../../domain/models/exceptionResult');
 
 function verifyUserProperties(userInfo) {
+
     let errMsg = [];
+
     if (!userInfo.socialId)
         errMsg.push('Param socialId is invalid');
 
