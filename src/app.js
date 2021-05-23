@@ -4,7 +4,6 @@ const errorHandler = require('../helpers/errorHandler');
 const logger = require('../services/logger.service');
 const { corsOptions } = require('../config.json');
 const compression = require('compression');
-const bodyParser = require('body-parser');
 const index = require('./routes/index');
 const express = require('express');
 const helmet = require('helmet');
@@ -14,8 +13,8 @@ const app = express();
 
 app.use(helmet());
 app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
 app.use(jwtMiddleWare());
 //Rotas

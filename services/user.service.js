@@ -2,45 +2,41 @@ const User = require('../domain/models/user');
 const repository = require('./repository.service');
 const ExceptionResult = require('../domain/models/exceptionResult');
 
-const selectUsersQuery = 'select id, userinfo from "user".userinfo';
-const insertUserQuery = 'insert into "user".userInfo(userinfo) values($1) returning id, userinfo';
+const selectUsersQuery = `select id,  userinfo from "user".userinfo`;
+
+const insertUserQuery = `insert into "user".userInfo(userinfo) values($1) returning id, userinfo;`;
 
 function getUsersQuery({ socialId, username, email, skip, take }) {
-    let query = `${selectUsersQuery} where 1=1`;
+    let query = `${selectUsersQuery} where 1=1 `;
     let params = [];
 
     if (socialId) {
         params.push(socialId);
-        query += `
-         and userinfo::jsonb->>'socialId'=$${params.length}
-         `;
+        query += `and userinfo::jsonb->>'socialId'=$${params.length}
+        `;
     }
 
     if (username) {
         params.push(username);
-        query += `
-        and userinfo::jsonb->>'username' ilike $${params.length}
+        query += `and userinfo::jsonb->>'username' ilike $${params.length}
         `;
     }
 
     if (email) {
         params.push(email);
-        query += `
-        and userinfo::jsonb->>'email' ilike $${params.length}
+        query += `and userinfo::jsonb->>'email' ilike $${params.length}
         `;
     }
 
     if (skip) {
         params.push(skip);
-        query += `
-        offset $${params.length}
+        query += `offset $${params.length}
         `;
     }
 
     if (take) {
         params.push(take);
-        query += `
-        limit $${params.length}
+        query += `limit $${params.length}
         `;
     }
 

@@ -31,8 +31,8 @@ exports.get = async (req, res, next) => {
         socialId = req.query.socialId;
         username = req.query.username;
         email = req.query.email;
-        skip = req.query.skip;
-        take = req.query.take;
+        skip = req.query.skip || 0;
+        take = req.query.take || 10;
 
         const allUsers = await userService.getUsers({ socialId, username, email, skip, take });
         res.json(new ApiResult('Lista de usuarios obtida com sucesso', allUsers.rows, allUsers.rowCount));
