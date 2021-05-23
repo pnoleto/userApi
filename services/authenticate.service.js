@@ -42,7 +42,7 @@ async function authenticate({ socialId }) {
 
         const refreshToken = await createToken({ ...userWithoutPassword }, config.refreshTokenOptions);
 
-        return { ...userWithoutPassword, token, refreshToken };
+        return { token, refreshToken };
     }
 
     throw { status: 401, name: 'InvalidCredential', message: 'Username or password are incorrect' };
@@ -57,7 +57,7 @@ async function refreshToken({ refreshToken }) {
 
         const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
 
-        return { ...userWithoutPassword, token };
+        return { token };
     }
 
     throw { status: 401, name: 'UnauthorizedError', message: 'Invalid WebToken or WebToken Expired' };

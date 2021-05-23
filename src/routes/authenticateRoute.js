@@ -1,5 +1,5 @@
 const express = require('express');
-const rolesEnum = require('../../enums/rolesEnum');
+const rolesEnum = require('../../domain/enums/rolesEnum');
 const authorize = require('../../helpers/authorizeHandler');
 const userscontroller = require('../controllers/userController');
 const authcontroller = require('./../controllers/authenticateController');

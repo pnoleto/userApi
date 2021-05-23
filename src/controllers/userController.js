@@ -1,10 +1,12 @@
-const ApiResult = require('../models/apiResult');
-const rolesEnums = require('./../../enums/rolesEnum');
+const ApiResult = require('../../domain/models/apiResult');
+const rolesEnums = require('../../domain/enums/rolesEnum');
 const userService = require('../../services/user.service');
-const ExceptionResult = require('../models/exceptionResult');
+const ExceptionResult = require('../../domain/models/exceptionResult');
 
 function verifyUserProperties(userInfo) {
+
     let errMsg = [];
+
     if (!userInfo.socialId)
         errMsg.push('Param socialId is invalid');
 
@@ -20,7 +22,7 @@ function verifyUserProperties(userInfo) {
     if (!userInfo.provider)
         errMsg.push('Param provider is invalid');
 
-    if (errMsg.length)
+    if (errMsg.length > 0)
         throw new ExceptionResult(412, 'PreconditionFailed', errMsg.toString());
 }
 
@@ -29,8 +31,8 @@ exports.get = async (req, res, next) => {
         socialId = req.query.socialId;
         username = req.query.username;
         email = req.query.email;
-        skip = req.query.skip;
-        take = req.query.take;
+        skip = req.query.skip || 0;
+        take = req.query.take || 10;
 
         const allUsers = await userService.getUsers({ socialId, username, email, skip, take });
         res.json(new ApiResult('Lista de usuarios obtida com sucesso', allUsers.rows, allUsers.rowCount));
