@@ -1,3 +1,5 @@
+const { Authorize } = require('./src/controllers/authenticateController.js');
+
 const swaggerAutogen = require('swagger-autogen')();
 const swaggerFile = './swagger_output.json';
 
@@ -12,7 +14,15 @@ const doc = {
   schemes: ['http', 'https'],
   consumes: ['application/json'],
   produces: ['application/json'],
-}
+  explorer: true,
+  securityDefinitions: {
+    Bearer: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header"
+    }
+  }
+};
 
 
 const endpointsFiles = [

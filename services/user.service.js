@@ -46,14 +46,20 @@ function getUsersQuery({ socialId, username, email, skip, take }) {
 async function createUser(userInfo) {
     try {
         const clientConnection = await repository.clientConnection();
-        const queryResult = await clientConnection.query(
+        const resultSet = await clientConnection.query(
             insertUserQuery,
             [JSON.stringify(userInfo)]
         );
 
+        if (resultSet.rowCount > 0) {
+            const entity = resultSet.rows[0];
+            userInfo = entity.userinfo;
+            userInfo.id = entity.id;
+        }
+
         clientConnection.end();
 
-        return queryResult;
+        return userInfo;
     }
     catch (error) {
         throw new ExceptionResult(500, error.name, error.message);
@@ -64,14 +70,14 @@ async function getUsers({ socialId, username, email, skip, take }) {
     try {
         const clientConnection = await repository.clientConnection();
         const paramsObj = getUsersQuery({ socialId, username, email, skip, take });
-        const queryResult = await clientConnection.query(
+        const resultSet = await clientConnection.query(
             paramsObj.query,
             paramsObj.params
         );
 
         clientConnection.end();
 
-        return queryResult;
+        return resultSet;
     }
     catch (error) {
         throw new ExceptionResult(500, error.name, error.message);

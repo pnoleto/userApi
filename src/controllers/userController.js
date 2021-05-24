@@ -64,9 +64,8 @@ exports.Insert = async (req, res, next) => {
 
 
         const user = await userService.createUser(userInfo);
-        userInfo.id = user.id;
 
-        res.json(new ApiResult('Usuario cadastrado com sucesso', userInfo, user.rowCount));
+        res.json(new ApiResult('Usuario cadastrado com sucesso', user, user.rowCount));
     } catch (error) {
         next(error);
     }
