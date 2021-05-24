@@ -5,6 +5,7 @@ function authorize(roles = []) {
     }
 
     return (req, res, next) => {
+        console.log(req);
         const userRoles = req.user.roles;
         const isAuthorized = roles.some(role => userRoles.includes(role));
 

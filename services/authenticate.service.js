@@ -28,7 +28,7 @@ async function verifyToken(refreshToken, tokenOptions) {
     return decodedPlayLoad;
 }
 
-async function authenticate({ socialId }) {
+async function authorize({ socialId }) {
 
     if (!socialId)
         throw { status: 412, name: 'PreconditionFailed', message: 'Param socialId is invalid' };
@@ -50,6 +50,9 @@ async function authenticate({ socialId }) {
 
 async function refreshToken({ refreshToken }) {
 
+    if (!refreshToken)
+        throw { status: 412, name: 'PreconditionFailed', message: 'RefreshToken not found' };
+
     const decodedPlayload = await verifyToken(refreshToken, config.refreshTokenOptions);
 
     if (decodedPlayload) {
@@ -63,4 +66,4 @@ async function refreshToken({ refreshToken }) {
     throw { status: 401, name: 'UnauthorizedError', message: 'Invalid WebToken or WebToken Expired' };
 }
 
-module.exports = { authenticate, refreshToken };
+module.exports = { authorize, refreshToken };

@@ -1,15 +1,15 @@
 const loginService = require('./../../services/authenticate.service');
 
-async function token(req, res, next) {
+exports.Authorize = async (req, res, next) => {
     try {
-        const token = await loginService.authenticate(req.body);
+        const token = await loginService.authorize(req.body);
         res.json(token);
     } catch (error) {
         next(error);
     }
 };
 
-async function refreshToken(req, res, next) {
+exports.RefreshToken = async (req, res, next) => {
     try {
         const refreshToken = await loginService.refreshToken(req.body);
         res.json(refreshToken);
@@ -17,5 +17,3 @@ async function refreshToken(req, res, next) {
         next(error)
     }
 };
-
-module.exports = { token, refreshToken }
