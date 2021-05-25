@@ -3,6 +3,10 @@ const { Authorize } = require('./src/controllers/authenticateController.js');
 const swaggerAutogen = require('swagger-autogen')();
 const swaggerFile = './swagger_output.json';
 
+const endpointsFiles = [
+  './src/app.js'
+];
+
 const doc = {
   info: {
     version: "1.0.0",
@@ -21,13 +25,13 @@ const doc = {
       name: "Authorization",
       in: "header"
     }
-  }
+  },
+  security: [
+    {
+      Bearer: []
+    }
+  ]
 };
-
-
-const endpointsFiles = [
-  './src/app.js'
-];
 
 swaggerAutogen(swaggerFile, endpointsFiles, doc)
   .then(async () => {

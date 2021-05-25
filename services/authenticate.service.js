@@ -29,41 +29,50 @@ async function verifyToken(refreshToken, tokenOptions) {
 }
 
 async function authorize({ socialId }) {
+    try {
+        if (!socialId)
+            throw { status: 412, name: 'PreconditionFailed', message: 'Param socialId is invalid' };
 
-    if (!socialId)
-        throw { status: 412, name: 'PreconditionFailed', message: 'Param socialId is invalid' };
+        const user = await userService.getUser(socialId);
 
-    const user = await userService.getUser(socialId);
+        if (user.id > 0) {
+            const { password, ...userWithoutPassword } = user;
 
-    if (user.id > 0) {
-        const { password, ...userWithoutPassword } = user;
+            const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
 
-        const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
+            const refreshToken = await createToken({ ...userWithoutPassword }, config.refreshTokenOptions);
 
-        const refreshToken = await createToken({ ...userWithoutPassword }, config.refreshTokenOptions);
+            return { token, refreshToken };
+        }
 
-        return { token, refreshToken };
+        throw { status: 401, name: 'InvalidCredential', message: 'Username or password are incorrect' };
     }
-
-    throw { status: 401, name: 'InvalidCredential', message: 'Username or password are incorrect' };
+    catch (error) {
+        throw { status: 500, name: error.name, message: error.message };
+    }
 }
 
 async function refreshToken({ refreshToken }) {
 
-    if (!refreshToken)
-        throw { status: 412, name: 'PreconditionFailed', message: 'RefreshToken not found' };
+    try {
+        if (!refreshToken)
+            throw { status: 412, name: 'PreconditionFailed', message: 'RefreshToken not found' };
 
-    const decodedPlayload = await verifyToken(refreshToken, config.refreshTokenOptions);
+        const decodedPlayload = await verifyToken(refreshToken, config.refreshTokenOptions);
 
-    if (decodedPlayload) {
-        const { password, iat, exp, iss, ...userWithoutPassword } = decodedPlayload;
+        if (decodedPlayload) {
+            const { password, iat, exp, iss, ...userWithoutPassword } = decodedPlayload;
 
-        const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
+            const token = await createToken({ ...userWithoutPassword }, config.tokenOptions);
 
-        return { token };
+            return { token };
+        }
+
+        throw { status: 401, name: 'UnauthorizedError', message: 'Invalid WebToken or WebToken Expired' };
     }
-
-    throw { status: 401, name: 'UnauthorizedError', message: 'Invalid WebToken or WebToken Expired' };
+    catch (error) {
+        throw { status: 500, name: error.name, message: error.message };
+    }
 }
 
 module.exports = { authorize, refreshToken };

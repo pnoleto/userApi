@@ -61,8 +61,6 @@ exports.Insert = async (req, res, next) => {
         if (isAlreadyUser)
             throw new ExceptionResult(409, 'Conflict', 'Usuario já cadastrado');
 
-
-
         const user = await userService.createUser(userInfo);
 
         res.json(new ApiResult('Usuario cadastrado com sucesso', user, user.rowCount));

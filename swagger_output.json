@@ -162,5 +162,10 @@
     }
   },
   "definitions": {},
-  "explorer": true
+  "explorer": true,
+  "security": [
+    {
+      "Bearer": []
+    }
+  ]
 }
