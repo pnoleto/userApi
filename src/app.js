@@ -15,7 +15,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 
-swaggerGen.swaggerGen(swaggerFile, ['./src/app.js'], doc);
+swaggerGen.swaggerGen(swaggerFile, ['./src/app'], doc);
 
 const app = express();
 
