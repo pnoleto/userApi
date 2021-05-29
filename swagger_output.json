@@ -161,7 +161,83 @@
       }
     }
   },
-  "definitions": {},
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "socialId": {
+          "type": "string",
+          "example": "123456"
+        },
+        "username": {
+          "type": "string",
+          "example": "Phelipe"
+        },
+        "photoUrl": {
+          "type": "string",
+          "example": "C:/Photo.png"
+        },
+        "email": {
+          "type": "string",
+          "example": "phelipe@example.com"
+        },
+        "provider": {
+          "type": "string",
+          "example": "Facebook"
+        },
+        "insertedAt": {
+          "type": "string",
+          "example": "01/01/2001"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "01/01/2001 || null"
+        },
+        "roles": {
+          "type": "string",
+          "example": "['admin','dbadmin']"
+        }
+      }
+    },
+    "ExceptionResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "404"
+        },
+        "name": {
+          "type": "string",
+          "example": "Paga not found"
+        },
+        "message": {
+          "type": "string",
+          "example": "this page was not found"
+        }
+      }
+    },
+    "ApiResult": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "request was succesful handled"
+        },
+        "source": {
+          "type": "string",
+          "example": "[Object, Object]"
+        },
+        "totalCount": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    }
+  },
   "explorer": true,
   "security": [
     {
