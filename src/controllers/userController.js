@@ -2,6 +2,7 @@ const ApiResult = require('../../domain/models/apiResult');
 const rolesEnums = require('../../domain/enums/rolesEnum');
 const userService = require('../../services/user.service');
 const ExceptionResult = require('../../domain/models/exceptionResult');
+const User = require('../../domain/models/user');
 
 function verifyUserProperties(userInfo) {
 
@@ -26,7 +27,7 @@ function verifyUserProperties(userInfo) {
         throw new ExceptionResult(412, 'PreconditionFailed', errMsg.toString());
 }
 
-exports.get = async (req, res, next) => {
+exports.List = async (req, res, next) => {
     try {
         socialId = req.query.socialId;
         username = req.query.username;
@@ -41,26 +42,34 @@ exports.get = async (req, res, next) => {
     }
 };
 
-exports.post = async (req, res, next) => {
+exports.Insert = async (req, res, next) => {
     try {
-        verifyUserProperties(req.body);
+        let userInfo = new User();
+        userInfo.username = req.body.username;
+        userInfo.photoUrl = req.body.photoUrl;
+        userInfo.email = req.body.email;
+        userInfo.roles = [rolesEnums.user];
+        userInfo.socialId = req.body.socialId;
+        userInfo.provider = req.body.provider;
+        userInfo.insertedAt = new Date();
+        userInfo.updatedAt = null;
 
-        const isAlreadyUser = (await userService.getUser(req.body.socialId)).id > 0;
+        verifyUserProperties(userInfo);
+
+        const isAlreadyUser = (await userService.getUser(userInfo.socialId)).id > 0;
 
         if (isAlreadyUser)
             throw new ExceptionResult(409, 'Conflict', 'Usuario já cadastrado');
 
+        const user = await userService.createUser(userInfo);
 
-        req.body.roles = [rolesEnums.user];
-
-        const user = await userService.createUser(req.body);
-        res.json(new ApiResult('Usuario cadastrado com sucesso', user.rows, user.rowCount));
+        res.json(new ApiResult('Usuario cadastrado com sucesso', user, user.rowCount));
     } catch (error) {
         next(error);
     }
 };
 
-exports.delete = async (req, res, next) => {
+exports.Delete = async (req, res, next) => {
     try {
         throw new ExceptionResult(501, 'Not implemented', 'Não implementado');
     } catch (error) {

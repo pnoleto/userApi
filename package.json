@@ -13,12 +13,15 @@
     "express-winston": "^4.1.0",
     "helmet": "^3.23.3",
     "pg": "^8.6.0",
+    "swagger-autogen": "^2.9.1",
+    "swagger-ui-express": "^4.1.4",
     "winston": "^3.3.3"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./bin/server.js"
+    "start": "nodemon ./bin/server.js",
+    "swagger-autogen": "node ./swagger.js"
   },
   "keywords": [],
   "author": "Phelipe Noleto",
