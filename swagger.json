@@ -28,5 +28,28 @@
         {
             "Bearer": []
         }
-    ]
+    ],
+    "definitions": {
+        "User": {
+            "id": 1,
+            "socialId": "123456",
+            "username": "Phelipe",
+            "photoUrl": "C:/Photo.png",
+            "email": "phelipe@example.com",
+            "provider": "Facebook",
+            "insertedAt": "01/01/2001",
+            "updatedAt": "01/01/2001 || null",
+            "roles": "['admin','dbadmin']"
+        },
+        "ExceptionResult": {
+            "status": "404",
+            "name": "Paga not found",
+            "message": "this page was not found"
+        },
+        "ApiResult": {
+            "message": "request was succesful handled",
+            "source": "[Object, Object]",
+            "totalCount": 1
+        }
+    }
 }
