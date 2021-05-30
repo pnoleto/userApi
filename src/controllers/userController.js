@@ -1,7 +1,7 @@
+const ExceptionResult = require('../../domain/models/exceptionResult');
 const ApiResult = require('../../domain/models/apiResult');
 const rolesEnums = require('../../domain/enums/rolesEnum');
 const userService = require('../../services/user.service');
-const ExceptionResult = require('../../domain/models/exceptionResult');
 const User = require('../../domain/models/user');
 
 function verifyUserProperties(userInfo) {
@@ -29,11 +29,11 @@ function verifyUserProperties(userInfo) {
 
 exports.List = async (req, res, next) => {
     try {
-        socialId = req.query.socialId;
-        username = req.query.username;
-        email = req.query.email;
-        skip = req.query.skip || 0;
-        take = req.query.take || 10;
+        let socialId = req.query.socialId;
+        let username = req.query.username;
+        let email = req.query.email;
+        let skip = req.query.skip || 0;
+        let take = req.query.take || 10;
 
         const allUsers = await userService.getUsers({ socialId, username, email, skip, take });
         res.json(new ApiResult('Lista de usuarios obtida com sucesso', allUsers.rows, allUsers.rowCount));
@@ -71,7 +71,10 @@ exports.Insert = async (req, res, next) => {
 
 exports.Delete = async (req, res, next) => {
     try {
-        throw new ExceptionResult(501, 'Not implemented', 'Não implementado');
+        let id = req.params.id;
+
+        const deletedUser = await userService.deleteUser(id);
+        res.json(new ApiResult('Usuario deletado com sucesso', [deletedUser], 1));
     } catch (error) {
         next(error);
     }

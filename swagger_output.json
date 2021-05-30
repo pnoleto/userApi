@@ -145,13 +145,13 @@
         "responses": {}
       }
     },
-    "/v1/users/{socialId}": {
+    "/v1/users/{id}": {
       "delete": {
         "tags": [],
         "description": "",
         "parameters": [
           {
-            "name": "socialId",
+            "name": "id",
             "in": "path",
             "required": true,
             "type": "string"

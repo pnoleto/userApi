@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.post('', authorize(rolesEnum.admin), userscontroller.Insert);
 router.get('', authorize(rolesEnum.admin), userscontroller.List);
-router.delete('/:socialId', authorize(rolesEnum.admin), userscontroller.Delete);
+router.delete('/:id', authorize(rolesEnum.admin), userscontroller.Delete);
 
 module.exports = router;

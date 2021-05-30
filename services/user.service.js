@@ -3,8 +3,8 @@ const repository = require('./repository.service');
 const ExceptionResult = require('../domain/models/exceptionResult');
 
 const selectUsersQuery = `select id,  userinfo from "user".userinfo`;
-
 const insertUserQuery = `insert into "user".userInfo(userinfo) values($1) returning id, userinfo;`;
+const deleteUserQuery = `delete from "user".userInfo where id = $1 returning id, userinfo;`;
 
 function getUsersQuery({ socialId, username, email, skip, take }) {
     let query = `${selectUsersQuery} where 1=1 `;
@@ -109,4 +109,27 @@ async function getUser(socialId) {
     }
 }
 
-module.exports = { getUser, getUsers, createUser }
+async function deleteUser(id) {
+    try {
+        const clientConnection = await repository.clientConnection();
+        const resultSet = await clientConnection.query(
+            deleteUserQuery,
+            [id]
+        );
+
+        if (resultSet.rowCount > 0) {
+            const entity = resultSet.rows[0];
+            user = entity.userinfo;
+            user.id = entity.id;
+        }
+
+        clientConnection.end();
+
+        return user;
+    }
+    catch (error) {
+        throw new ExceptionResult(500, error.name, error.message);
+    }
+}
+
+module.exports = { getUser, getUsers, createUser, deleteUser }
