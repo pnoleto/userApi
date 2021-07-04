@@ -39,7 +39,7 @@
             "provider": "Facebook",
             "insertedAt": "01/01/2001",
             "updatedAt": "01/01/2001 || null",
-            "roles": "['admin','dbadmin']"
+            "roles": []
         },
         "ExceptionResult": {
             "status": "404",
@@ -48,7 +48,7 @@
         },
         "ApiResult": {
             "message": "request was succesful handled",
-            "source": "[Object, Object]",
+            "source": [],
             "totalCount": 1
         }
     }

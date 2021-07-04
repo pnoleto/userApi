@@ -3,28 +3,14 @@ const ApiResult = require('../../domain/models/apiResult');
 const rolesEnums = require('../../domain/enums/rolesEnum');
 const userService = require('../../services/user.service');
 const User = require('../../domain/models/user');
+const uservalidator = require('../../domain/validators/userValidator');
 
-function verifyUserProperties(userInfo) {
+function verifyUserProperties({ socialId, username, email, photoUrl, provider }) {
 
-    let errMsg = [];
+    let userValidation = uservalidator.userValidator({ socialId, username, email, photoUrl, provider });
 
-    if (!userInfo.socialId)
-        errMsg.push('Param socialId is invalid');
-
-    if (!userInfo.username)
-        errMsg.push('Param username is invalid');
-
-    if (!userInfo.email)
-        errMsg.push('Param email is invalid');
-
-    if (!userInfo.photoUrl)
-        errMsg.push('Param photoUrl is invalid');
-
-    if (!userInfo.provider)
-        errMsg.push('Param provider is invalid');
-
-    if (errMsg.length > 0)
-        throw new ExceptionResult(412, 'PreconditionFailed', errMsg.toString());
+    if (userValidation.hasErrors())
+        throw new ExceptionResult(412, 'PreconditionFailed', userValidation.getErrors());
 }
 
 exports.List = async (req, res, next) => {
