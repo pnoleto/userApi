@@ -13,7 +13,6 @@ const doc = require('../swagger.json');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-const hash = require('crypto');
 
 const app = express();
 
