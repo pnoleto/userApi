@@ -2,7 +2,7 @@ const User = require('../domain/models/user');
 const repository = require('./repository.service');
 const ExceptionResult = require('../domain/models/exceptionResult');
 
-const selectUsersQuery = `select id,  userinfo from "user".userinfo`;
+const selectUsersQuery = `select id,  userinfo from "user".userInfo`;
 const insertUserQuery = `insert into "user".userInfo(userinfo) values($1) returning id, userinfo;`;
 const deleteUserQuery = `delete from "user".userInfo where id = $1 returning id, userinfo;`;
 

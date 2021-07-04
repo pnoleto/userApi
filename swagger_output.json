@@ -198,8 +198,9 @@
           "example": "01/01/2001 || null"
         },
         "roles": {
-          "type": "string",
-          "example": "['admin','dbadmin']"
+          "type": "array",
+          "example": [],
+          "items": {}
         }
       }
     },
@@ -228,8 +229,9 @@
           "example": "request was succesful handled"
         },
         "source": {
-          "type": "string",
-          "example": "[Object, Object]"
+          "type": "array",
+          "example": [],
+          "items": {}
         },
         "totalCount": {
           "type": "number",
